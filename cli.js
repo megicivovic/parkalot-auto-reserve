@@ -82,9 +82,9 @@ const job = cron.schedule('0 1 12 * *', (async () => {
 
             // The day of week is the first <span> in the title element.
             const dayOfWeek = await titleElement.$eval('span', node => node.innerText)
-            // if (dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday') {
-            //     continue
-            // }
+            if (dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday') {
+                continue
+            }
             hasntReserved = false;
         }
 
