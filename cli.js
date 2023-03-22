@@ -23,7 +23,7 @@ async function configure() {
     return config
 };
 
-const job = cron.schedule('0 1 12 * *', (async () => {
+const job = cron.schedule('1 1 * * *', (async () => {
     let config
 
     try {
@@ -154,7 +154,10 @@ const job = cron.schedule('0 1 12 * *', (async () => {
         console.error('Error occured' + e)
         process.exit(1)
     }
-}));
+}), {
+    scheduled: true,
+    timezone: "Europe/Belgrade"
+});
 
 job.start();
 console.log('Job started!')
