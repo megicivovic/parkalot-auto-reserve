@@ -23,7 +23,12 @@ async function configure() {
     return config
 };
 
-const job = cron.schedule('1 1 * * *', (async () => {
+const job = cron.schedule('1 1 * * *', (async () => makeReservation()), {
+    scheduled: true,
+    timezone: "Europe/Belgrade"
+});
+
+async function makeReservation() {
     let config
 
     try {
@@ -83,9 +88,10 @@ const job = cron.schedule('1 1 * * *', (async () => {
             // The day of week is the first <span> in the title element.
             const dayOfWeek = await titleElement.$eval('span', node => node.innerText)
             if (dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday') {
-                continue
+                hasntReserved = false
+            } else {
+                hasntReserved = true;
             }
-            hasntReserved = false;
         }
 
         if (!row) {
@@ -122,7 +128,7 @@ const job = cron.schedule('1 1 * * *', (async () => {
         })
         await page.waitFor(2000)
 
-        let buttonReserve = await page.$(`#${buttonId}`);
+        let buttonReserve = await page.$(`[id="${buttonId}"]`);
         if (buttonReserve) {
             reserveClicked = true;
             await buttonReserve.click()
@@ -154,10 +160,7 @@ const job = cron.schedule('1 1 * * *', (async () => {
         console.error('Error occured' + e)
         process.exit(1)
     }
-}), {
-    scheduled: true,
-    timezone: "Europe/Belgrade"
-});
+}
 
 job.start();
 console.log('Job started!')
