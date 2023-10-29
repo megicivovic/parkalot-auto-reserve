@@ -88,10 +88,9 @@ async function makeReservation() {
             // The day of week is the first <span> in the title element.
             const dayOfWeek = await titleElement.$eval('span', node => node.innerText)
             if (dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday') {
-                hasntReserved = false
-            } else {
-                hasntReserved = true;
+                continue
             }
+            hasntReserved = false;
         }
 
         if (!row) {
